@@ -1,0 +1,17 @@
+# 依存
+node_modules/
+
+# ビルド生成物
+dist/
+*.tsbuildinfo
+
+# env / secret
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# editor / OS
+.DS_Store
+.idea/
