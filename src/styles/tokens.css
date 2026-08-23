@@ -1,0 +1,161 @@
+/**
+ * dh-ui 設計トークン
+ *
+ * CSS 変数として定義し、Tailwind v4 の @theme にも流す。
+ * Tailwind を使わないアプリでも var(--dh-*) で参照できる。
+ *
+ * 色は実測にもとづいて選んである。とくにアクセントは
+ * WCAG AA（本文 4.5:1）を満たす値だけを入れている。
+ *   --dh-accent (#95612b) on --dh-bg (#f7f6f3) = 4.73:1
+ *   #ffffff on --dh-accent                     = 5.22:1
+ * 以前使っていた #a8703a は 3.77:1 で未達だった。
+ */
+
+:root {
+  /* 面 */
+  --dh-bg: #f7f6f3;          /* ページ背景 */
+  --dh-surface: #ffffff;     /* カード・ヘッダ */
+  --dh-surface-2: #f0eeea;   /* 少し沈めた面 */
+  --dh-ink: #1c1c1c;         /* 本文 */
+  --dh-ink-muted: #5b5f63;   /* 補助テキスト */
+  --dh-line: #ddd9d2;        /* 罫線（装飾用。面との差は小さい） */
+  /* 入力欄やボタンの枠。WCAG 1.4.11 は操作部品の枠に 3:1 を求めるので、
+     装飾用の --dh-line とは別に用意する。#ffffff に対して 3.06:1。 */
+  --dh-line-strong: #8f8a81;
+
+  /* アクセント（1色だけ） */
+  --dh-accent: #95612b;
+  --dh-accent-hover: #7d5124;
+  --dh-accent-ink: #ffffff;
+  /* #f3ece2 だと accent の文字が 4.45:1 で AA に 0.05 届かなかった */
+  --dh-accent-soft: #f7f1e9;
+
+  /* 状態 */
+  --dh-ok: #1a7f4b;
+  --dh-warn: #9a6a00;
+  --dh-danger: #b3261e;
+
+  /* 反転面（フッター・ヒーローの覆い） */
+  --dh-inverse-bg: #1c1c1c;
+  --dh-inverse-ink: #ffffff;
+  --dh-inverse-muted: #b9b6b1;
+  --dh-inverse-line: #3a3a3a;
+
+  /* 寸法 */
+  --dh-header-h: 56px;        /* ジャパンサーチと同じ。ページ間で変えない */
+  --dh-container: 1800px;     /* 本文の最大幅。1種類だけ */
+  --dh-container-prose: 46rem;/* 読み物の段幅 */
+  --dh-radius: 10px;
+  --dh-radius-sm: 6px;
+  --dh-radius-pill: 9999px;
+
+  /* 影 */
+  --dh-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.06);
+  --dh-shadow: 0 2px 8px rgb(0 0 0 / 0.08);
+  --dh-shadow-lg: 0 8px 28px rgb(0 0 0 / 0.14);
+
+  /* 字 */
+  --dh-font-sans: system-ui, -apple-system, "Hiragino Kaku Gothic ProN",
+    "Noto Sans JP", "Yu Gothic", Meiryo, sans-serif;
+  --dh-font-serif: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
+  --dh-font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --dh-bg: #121316;
+    --dh-surface: #191b1f;
+    --dh-surface-2: #202329;
+    --dh-ink: #ececed;
+    --dh-ink-muted: #9aa0a6;
+    --dh-line: #2c2f35;
+
+    --dh-accent: #d9a463;
+    --dh-accent-hover: #e6b47a;
+    --dh-accent-ink: #1c1c1c;
+    --dh-accent-soft: #2a231a;
+
+    --dh-inverse-bg: #0c0d0f;
+    --dh-inverse-ink: #ececed;
+    --dh-inverse-muted: #8d9297;
+    --dh-inverse-line: #2c2f35;
+  }
+}
+
+/* 暗色の指定は 3 通りを受ける:
+   - [data-theme="dark"]（属性方式）
+   - .dark（next-themes の class 方式。多くのアプリはこちら）
+   - prefers-color-scheme（上の @media） */
+:root[data-theme="dark"],
+.dark {
+  --dh-bg: #121316;
+  --dh-surface: #191b1f;
+  --dh-surface-2: #202329;
+  --dh-ink: #ececed;
+  --dh-ink-muted: #9aa0a6;
+  --dh-line: #2c2f35;
+
+  --dh-accent: #d9a463;
+  --dh-accent-hover: #e6b47a;
+  --dh-accent-ink: #1c1c1c;
+  --dh-accent-soft: #2a231a;
+
+  --dh-inverse-bg: #0c0d0f;
+  --dh-inverse-ink: #ececed;
+  --dh-inverse-muted: #8d9297;
+  --dh-inverse-line: #2c2f35;
+  --dh-line-strong: #6a7078;   /* #191b1f に対して 3.10:1 */
+}
+
+/* Tailwind v4。これで bg-surface / text-ink / max-w-container などが生える。 */
+@theme inline {
+  --color-bg: var(--dh-bg);
+  --color-surface: var(--dh-surface);
+  --color-surface-2: var(--dh-surface-2);
+  --color-ink: var(--dh-ink);
+  --color-ink-muted: var(--dh-ink-muted);
+  --color-line: var(--dh-line);
+  --color-accent: var(--dh-accent);
+  --color-accent-hover: var(--dh-accent-hover);
+  --color-accent-ink: var(--dh-accent-ink);
+  --color-accent-soft: var(--dh-accent-soft);
+  --color-inverse-bg: var(--dh-inverse-bg);
+  --color-inverse-ink: var(--dh-inverse-ink);
+  --color-inverse-muted: var(--dh-inverse-muted);
+  --color-inverse-line: var(--dh-inverse-line);
+  --color-ok: var(--dh-ok);
+  --color-warn: var(--dh-warn);
+  --color-danger: var(--dh-danger);
+
+  --font-sans: var(--dh-font-sans);
+  --font-serif: var(--dh-font-serif);
+  --font-mono: var(--dh-font-mono);
+
+  --radius-dh: var(--dh-radius);
+  --radius-dh-sm: var(--dh-radius-sm);
+  /* これを書き忘れると rounded-pill が border-radius:0 になり、
+     Chip やファセットタグが角丸ゼロの矩形で出る。実際に踏んだ。 */
+  --radius-pill: var(--dh-radius-pill);
+
+  --shadow-sm: var(--dh-shadow-sm);
+  --shadow: var(--dh-shadow);
+  --shadow-lg: var(--dh-shadow-lg);
+
+  --color-line-strong: var(--dh-line-strong);
+
+  --spacing-header: var(--dh-header-h);
+}
+
+/* 基本の下敷き。アプリ側の globals.css から @import した直後に効く。 */
+body {
+  background: var(--dh-bg);
+  color: var(--dh-ink);
+  font-family: var(--dh-font-sans);
+}
+
+/* キーボード操作で必ず見えるフォーカス */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--dh-accent);
+  outline-offset: 2px;
+  border-radius: var(--dh-radius-sm);
+}

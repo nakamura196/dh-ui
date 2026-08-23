@@ -1,0 +1,152 @@
+/**
+ * 地図（MapLibre）をテーマに追従させる。
+ *
+ * MapLibre は素の DOM 要素と自前の CSS で操作系を描くので、
+ * トークンを当てないとライト固定のまま浮く。マーカーも色をベタ書きすると
+ * 暗色で沈む／明色で飛ぶ。ここで一括して面倒を見る。
+ *
+ * 使い方: tokens.css の後にこのファイルも読み込む。
+ */
+
+:root {
+  /* 地点の意味づけ。地図以外（凡例）でも同じ色を使えるようトークンにする */
+  --dh-map-visited: #c0392b;      /* 実際に映っている地点 */
+  --dh-map-mentioned: transparent;/* 案内板の記載のみ（白抜き） */
+  --dh-map-ring: #ffffff;         /* マーカーの縁 */
+  --dh-map-shadow: rgb(0 0 0 / 0.45);
+
+  /* 複数の映像を1枚の地図に重ねるときの識別色。
+     暗い面では沈むので、ダーク側で明度を上げた対を用意する。 */
+  --dh-cat-1: #c0392b;
+  --dh-cat-2: #1d5fa8;
+  --dh-cat-3: #15803d;
+  --dh-cat-4: #a55a08;
+  --dh-cat-5: #6d28d9;
+  --dh-cat-6: #0e7490;
+}
+
+:root[data-theme="dark"],
+.dark {
+  --dh-map-visited: #ef6b5e;
+  --dh-map-ring: #14161a;
+  --dh-map-shadow: rgb(0 0 0 / 0.7);
+
+  --dh-cat-1: #ef6b5e;
+  --dh-cat-2: #6fa8f5;
+  --dh-cat-3: #55c98a;
+  --dh-cat-4: #e0a44a;
+  --dh-cat-5: #b295f7;
+  --dh-cat-6: #4cc0d9;
+}
+
+/* --- マーカー -------------------------------------------------- */
+
+.dh-marker {
+  width: 18px;
+  height: 18px;
+  border-radius: 9999px;
+  cursor: pointer;
+  border: 2px solid var(--dh-map-ring);
+  box-shadow: 0 1px 4px var(--dh-map-shadow);
+  background: var(--dh-marker-color, var(--dh-map-visited));
+  padding: 0;
+}
+
+/* 案内板に名前が出るだけで、映像に対応する場面が無い地点。
+   「行っていない」ことを塗りの有無で示す */
+.dh-marker--mentioned {
+  background: var(--dh-surface);
+  border-color: var(--dh-marker-color, var(--dh-map-visited));
+}
+
+.dh-marker:focus-visible {
+  outline: 2px solid var(--dh-accent);
+  outline-offset: 2px;
+}
+
+/* --- 操作系（ズーム・縮尺・帰属） ------------------------------- */
+
+.maplibregl-ctrl-group {
+  background: var(--dh-surface) !important;
+  border: 1px solid var(--dh-line);
+  box-shadow: 0 1px 4px var(--dh-map-shadow) !important;
+}
+
+.maplibregl-ctrl-group button + button {
+  border-top: 1px solid var(--dh-line) !important;
+}
+
+.maplibregl-ctrl-group button .maplibregl-ctrl-icon {
+  /* 既定のアイコンは黒。暗色では反転させる */
+  filter: var(--dh-map-icon-filter, none);
+}
+
+:root[data-theme="dark"] .maplibregl-ctrl-group button .maplibregl-ctrl-icon,
+.dark .maplibregl-ctrl-group button .maplibregl-ctrl-icon {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+.maplibregl-ctrl-scale {
+  background: color-mix(in srgb, var(--dh-surface) 82%, transparent) !important;
+  border-color: var(--dh-line) !important;
+  color: var(--dh-ink) !important;
+}
+
+.maplibregl-ctrl-attrib {
+  background: color-mix(in srgb, var(--dh-surface) 82%, transparent) !important;
+  color: var(--dh-ink-muted) !important;
+}
+
+.maplibregl-ctrl-attrib a {
+  color: var(--dh-ink-muted) !important;
+}
+
+.maplibregl-ctrl-attrib-button {
+  filter: var(--dh-map-icon-filter, none);
+}
+
+:root[data-theme="dark"] .maplibregl-ctrl-attrib-button,
+.dark .maplibregl-ctrl-attrib-button {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+/* --- ポップアップ ----------------------------------------------- */
+
+.maplibregl-popup-content {
+  background: var(--dh-surface) !important;
+  color: var(--dh-ink) !important;
+  border: 1px solid var(--dh-line);
+  border-radius: var(--dh-radius-sm) !important;
+  box-shadow: 0 4px 16px var(--dh-map-shadow) !important;
+  padding: 10px 12px !important;
+  font-family: var(--dh-font-sans);
+}
+
+.maplibregl-popup-anchor-top .maplibregl-popup-tip,
+.maplibregl-popup-anchor-top-left .maplibregl-popup-tip,
+.maplibregl-popup-anchor-top-right .maplibregl-popup-tip {
+  border-bottom-color: var(--dh-surface) !important;
+}
+.maplibregl-popup-anchor-bottom .maplibregl-popup-tip,
+.maplibregl-popup-anchor-bottom-left .maplibregl-popup-tip,
+.maplibregl-popup-anchor-bottom-right .maplibregl-popup-tip {
+  border-top-color: var(--dh-surface) !important;
+}
+.maplibregl-popup-anchor-left .maplibregl-popup-tip {
+  border-right-color: var(--dh-surface) !important;
+}
+.maplibregl-popup-anchor-right .maplibregl-popup-tip {
+  border-left-color: var(--dh-surface) !important;
+}
+
+.dh-popup-item {
+  font-size: 12px;
+  line-height: 1.6;
+}
+.dh-popup-item .dh-popup-source {
+  color: var(--dh-ink-muted);
+}
+.dh-popup-item .dh-popup-time {
+  font-family: var(--dh-font-mono);
+  color: var(--dh-accent);
+}
