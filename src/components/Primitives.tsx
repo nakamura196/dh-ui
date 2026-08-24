@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import type { ReactNode } from "react";
 
 /** 主要な行動。1画面に1つが目安。 */
@@ -68,19 +69,36 @@ export function Stat({ label, value, tone = "default" }: {
 /** 資料カード。画像を主役にする（無声映画は絵でしか判別できない）。 */
 export function MediaCard({
   href, image, title, meta, children, badges, LinkComponent, imageAlt = "",
+  imageFallback,
 }: {
   href: string; image?: string; title: ReactNode; meta?: ReactNode;
   children?: ReactNode; badges?: ReactNode; imageAlt?: string;
+  /** 画像が読めなかったときに面へ出す短い語。省くと無地のまま */
+  imageFallback?: ReactNode;
   LinkComponent?: React.ComponentType<{ href: string; className?: string; children: ReactNode }>;
 }) {
   const A = LinkComponent ?? (({ href: h, className, children: c }) => <a href={h} className={className}>{c}</a>);
+  // 画像が読めなかったときに、壊れた画像アイコンを並べない。
+  // 資料の画像は認証の内側に置かれることがあり（未公開素材）、
+  // 閲覧者によっては 401 が返る。そこで無地の面に落とす。
+  const [imageFailed, setImageFailed] = useState(false);
+  const showImage = image && !imageFailed;
   return (
     <A href={href} className="group flex flex-col overflow-hidden rounded-dh border border-line bg-surface shadow-sm transition hover:border-accent hover:shadow">
-      {image ? (
+      {showImage ? (
         /* eslint-disable-next-line @next/next/no-img-element */
-        <img src={image} alt={imageAlt} className="aspect-video w-full object-cover transition group-hover:opacity-90" />
+        <img
+          src={image}
+          alt={imageAlt}
+          onError={() => setImageFailed(true)}
+          className="aspect-video w-full object-cover transition group-hover:opacity-90"
+        />
       ) : (
-        <div className="aspect-video w-full bg-surface-2" />
+        <div className="flex aspect-video w-full items-center justify-center bg-surface-2 px-3 text-center">
+          {imageFallback && (
+            <span className="text-[11px] leading-tight text-ink-muted">{imageFallback}</span>
+          )}
+        </div>
       )}
       <div className="flex flex-1 flex-col p-3">
         <h3 className="leading-snug font-semibold">{title}</h3>
