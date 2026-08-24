@@ -54,6 +54,16 @@
 
 /* 案内板に名前が出るだけで、映像に対応する場面が無い地点。
    「行っていない」ことを塗りの有無で示す */
+/* 範囲でしか示せない地点。中を空け、破線の縁にして「点ではない」と分かるようにする。
+   docs/place-granularity.md の規則で、点は「ここだと言える」ときだけに使う。 */
+.dh-marker--area {
+  background: transparent;
+  border-style: dashed;
+  border-width: 2px;
+  border-color: var(--dh-marker-color, var(--dh-map-visited));
+  box-shadow: none;
+}
+
 .dh-marker--mentioned {
   background: var(--dh-surface);
   border-color: var(--dh-marker-color, var(--dh-map-visited));
