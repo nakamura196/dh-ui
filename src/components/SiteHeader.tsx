@@ -9,6 +9,9 @@ export type NavItem = { href: string; label: string; active?: boolean };
  * ページごとに高さが変わると、遷移のたびに本文が縦に飛ぶ。
  *
  * 左: サイト名 / 中: 主要ナビ / 右: 任意（言語・テーマ・ログイン等）
+ *
+ * 押す場所は高さ 44px 以上にする（指で押す方・手の震える方のため）。
+ * ヘッダの高さ 56px の中に収まる。
  */
 export function SiteHeader({
   siteName,
@@ -40,7 +43,7 @@ export function SiteHeader({
         className="mx-auto flex h-full w-full items-center gap-4 px-4 sm:px-6"
         style={{ maxWidth: "var(--dh-container)" }}
       >
-        <A href={href} className="shrink-0 text-[15px] font-semibold tracking-tight">
+        <A href={href} className="inline-flex min-h-11 shrink-0 items-center text-[15px] font-semibold tracking-tight">
           {siteName}
         </A>
         {nav.length > 0 && (
@@ -49,7 +52,7 @@ export function SiteHeader({
               <A
                 key={n.href}
                 href={n.href}
-                className={`rounded-dh-sm px-2.5 py-1.5 text-sm whitespace-nowrap transition ${
+                className={`inline-flex min-h-11 items-center rounded-dh-sm px-3 text-sm whitespace-nowrap transition ${
                   n.active
                     ? "bg-accent-soft font-medium text-accent"
                     : "text-ink-muted hover:bg-surface-2 hover:text-ink"

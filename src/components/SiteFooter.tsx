@@ -47,12 +47,12 @@ export function SiteFooter({
               <h2 className="mb-2 text-xs font-semibold tracking-wider text-inverse-muted uppercase">
                 {g.title}
               </h2>
-              <ul className="space-y-1.5">
+              <ul>
                 {g.links.map((l) => (
                   <li key={l.href + l.label}>
                     <A
                       href={l.href}
-                      className="text-sm text-inverse-ink/90 underline-offset-4 hover:underline"
+                      className="inline-flex min-h-11 min-w-11 items-center text-sm text-inverse-ink/90 underline-offset-4 hover:underline"
                     >
                       {l.label}
                     </A>

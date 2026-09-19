@@ -32,7 +32,10 @@
 
   /* 状態 */
   --dh-ok: #1a7f4b;
-  --dh-warn: #9a6a00;
+  /* 管理画面の帯のように、warn を薄く敷いた面（warn/10〜15）の上に warn の文字を
+     載せる使い方がある。#9a6a00 ではその面で 3.52〜4.17:1 と AA に届かなかった。
+     #7a5300 は warn/10 の面で 5.7:1、白地で 6.9:1、白文字を載せて 6.9:1 */
+  --dh-warn: #7a5300;
   --dh-danger: #b3261e;
 
   /* 反転面（フッター・ヒーローの覆い） */
@@ -64,6 +67,7 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --dh-bg: #121316;
+    --dh-warn: #d49a2a; /* 暗地で 7.5:1、warn/15 の面で 5.9:1 */
     --dh-surface: #191b1f;
     --dh-surface-2: #202329;
     --dh-ink: #ececed;
@@ -89,6 +93,7 @@
 :root[data-theme="dark"],
 .dark {
   --dh-bg: #121316;
+  --dh-warn: #d49a2a;
   --dh-surface: #191b1f;
   --dh-surface-2: #202329;
   --dh-ink: #ececed;
